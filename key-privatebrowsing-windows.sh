@@ -8,6 +8,7 @@ unzip -d omni omni.ja
 sed -i -e '/<key id="key_privatebrowsing"/{ N; s/accel,shift/accel,alt,shift/}' \
 	omni/chrome/browser/content/browser/browser.xhtml
 cd omni && /c/Program\ Files/7-Zip/7z.exe a ../omni.ja.zip *
+cd ..
 rm -f /c/Program\ Files/Mozilla\ Firefox/browser/omni.ja
 cp omni.ja.zip /c/Program\ Files/Mozilla\ Firefox/browser/omni.ja
 
