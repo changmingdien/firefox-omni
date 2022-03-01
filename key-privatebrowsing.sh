@@ -19,7 +19,7 @@ cp omni.ja.zip "$OMNI"
 
 # Linux aries
 rm  /home/morgan/.cache/mozilla/firefox/47f7vds8.default/startupCache/startupCache.8.little
-# Windows 7 VATICS
-rm -f /c/Users/morgan.chang/AppData/Local/Mozilla/Firefox/Profiles/810fjj3t.default/startupCache/startupCache.8.little
+# Windows 10 VATICS
+rm -f /c/Users/morgan.chang/AppData/Local/Mozilla/Firefox/Profiles/6qja40ki.default-beta/startupCache/startupCache.8.little
 # Windows 10 orion
 rm -f /c/Users/morgan/AppData/Local/Mozilla/Firefox/Profiles/ge0idutt.default-beta/startupCache/startupCache.8.little
