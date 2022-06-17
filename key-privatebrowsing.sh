@@ -1,25 +1,85 @@
-#!/bin/sh
+#!/bin/bash
 
-rm -rf omni *.zip
-mkdir -p omni
 
-[ -e /c/Program\ Files/Mozilla\ Firefox/browser/omni.ja ] && OMNI=/c/Program\ Files/Mozilla\ Firefox/browser/omni.ja
-[ -e /usr/lib/firefox/browser/omni.ja ] && OMNI=/usr/lib/firefox/browser/omni.ja
-cp "$OMNI" ./
+declare -A OMNI STARTUPCACHE
 
-unzip -d omni omni.ja
-sed -i -e '/<key id="key_privatebrowsing"/{ N; s/accel,shift/accel,alt,shift/}' \
-	omni/chrome/browser/content/browser/browser.xhtml
+omni_ja="/c/Program Files/Mozilla Firefox Beta/browser/omni.ja"
+if [ -e "$omni_ja" ]; then
+	startupcache="/c/Users/morgan.chang/AppData/Local/Mozilla/Firefox/Profiles/6qja40ki.default-beta/startupCache/startupCache.8.little"
+	if [ -e "$startupcache" ]; then
+		OMNI['vtx-morgan-beta']="$omni_ja"
+		STARTUPCACHE['vtx-morgan-beta']="$startupcache"
+	fi
+fi
 
-which zip &> /dev/null && ZIP=zip OPT="-r" || ZIP=/c/Program\ Files/7-Zip/7z.exe OPT='a'
-cd omni && "$ZIP" $OPT ../omni.ja.zip *
-cd ..
-rm -f "$OMNI"
-cp omni.ja.zip "$OMNI"
+omni_ja="/c/Program Files/Firefox Developer Edition/browser/omni.ja"
+if [ -e "$omni_ja" ]; then
+	startupcache="/c/Users/morgan.chang/AppData/Local/Mozilla/Firefox/Profiles/y5s71ffn.morgan-Developer/startupCache/startupCache.8.little"
+	if [ -e "$startupcache" ]; then
+		OMNI['vtx-morgan-developer']="${omni_ja}"
+		STARTUPCACHE['vtx-morgan-developer']="$startupcache"
+	fi
+fi
 
-# Linux aries
-rm -f /home/morgan/.cache/mozilla/firefox/47f7vds8.default/startupCache/startupCache.8.little
-# Windows 10 VATICS
-rm -f /c/Users/morgan.chang/AppData/Local/Mozilla/Firefox/Profiles/6qja40ki.default-beta/startupCache/startupCache.8.little
-# Windows 10 orion
-rm -f /c/Users/morgan/AppData/Local/Mozilla/Firefox/Profiles/ge0idutt.default-beta/startupCache/startupCache.8.little
+
+omni_ja="/c/Users/morgan/AppData/Local/Firefox Developer Edition/browser/omni.ja"
+if [ -e "$omni_ja" ]; then
+	startupcache="/c/Users/morgan/AppData/Local/Mozilla/Firefox/Profiles/ge0idutt.default-beta/startupCache/startupCache.8.little"
+	if [ -e "$startupcache" ]; then
+		OMNI['orion-developer']="${omni_ja}"
+		STARTUPCACHE['orion-developer']="$startupcache"
+	fi
+fi
+
+omni_ja="/c/Program Files/Firefox Nightly/browser/omni.ja"
+if [ -e "$omni_ja" ]; then
+	startupcache="/c/Users/morgan/AppData/Local/Mozilla/Firefox/Profiles/bjhk9f3k.Nightly/startupCache/startupCache.8.little"
+	if [ -e "$startupcache" ]; then
+		OMNI['orion-nightly']=${omni_ja}
+		STARTUPCACHE['orion-nightly']="$startupcache"
+	fi
+	startupcache="/c/Users/morgan.chang/AppData/Local/Mozilla/Firefox/Profiles/k4balfyj.morgan-nightly/startupCache/startupCache.8.little"
+	if [ -e "$startupcache" ]; then
+		OMNI['vtx-morgan-nightly']=${omni_ja}
+		STARTUPCACHE['vtx-morgan-nightly']="$startupcache"
+	fi
+fi
+
+omni_ja="/usr/lib/firefox/browser/omni.ja"
+if [ -e "$omni_ja" ]; then
+	startupcache="/home/morgan/.cache/mozilla/firefox/47f7vds8.default/startupCache/startupCache.8.little"
+	if [ -e "$startupcache" ]; then
+		OMNI['aries']=${omni_ja}
+		STARTUPCACHE['aries']="$startupcache"
+	fi
+fi
+
+echo ==============================================
+echo ${!OMNI[@]}
+echo ==============================================
+echo ${OMNI[@]}
+echo ==============================================
+echo ${STARTUPCACHE[@]}
+echo ==============================================
+exit
+
+
+for k in "${!OMNI[@]}"; do
+	if [ -e "${OMNI[$k]}" ]; then
+		rm -rf omni *.zip
+		mkdir -p omni
+		cp "${OMNI[$k]}" ./
+
+		unzip -d omni omni.ja
+		sed -i -e '/<key id="key_privatebrowsing"/{ N; s/accel,shift/accel,alt,shift/}' \
+			omni/chrome/browser/content/browser/browser.xhtml
+
+		which zip &> /dev/null && ZIP=zip OPT="-r" || ZIP=/c/Program\ Files/7-Zip/7z.exe OPT='a'
+		cd omni && "$ZIP" $OPT ../omni.ja.zip *
+		cd ..
+		rm -f "${OMNI[$k]}"
+		cp omni.ja.zip "${OMNI[$k]}"
+
+		rm -f "${STARTUPCACHE[$k]}"
+	fi
+done
