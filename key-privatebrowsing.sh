@@ -1,5 +1,25 @@
 #!/bin/bash
 
+usage()
+{
+        echo "-d  dry-run mode"
+}
+
+DRYRUN=
+
+while getopts 'dh' option
+do
+        case $option in
+                d)
+                        DRYRUN=y
+                        ;;
+                h|?)
+                        usage
+                        exit 2
+                        ;;
+        esac
+done
+
 
 declare -A OMNI STARTUPCACHE
 
@@ -55,13 +75,13 @@ if [ -e "$omni_ja" ]; then
 fi
 
 echo ==============================================
-echo ${!OMNI[@]}
+echo Environments of omni.ja : ${!OMNI[@]}
 echo ==============================================
-echo ${OMNI[@]}
+echo Paths of omni.ja : ${OMNI[@]}
 echo ==============================================
-echo ${STARTUPCACHE[@]}
+echo startupCache : ${STARTUPCACHE[@]}
 echo ==============================================
-exit
+[ x"$DRYRUN" != x ] && exit
 
 
 for k in "${!OMNI[@]}"; do
