@@ -90,7 +90,10 @@ for k in "${!OMNI[@]}"; do
 		mkdir -p omni
 		cp "${OMNI[$k]}" ./
 
-		unzip -d omni omni.ja
+		[ -x /c/Program\ Files/7-Zip/7z.exe ] \
+			&& UNZIP=/c/Program\ Files/7-Zip/7z.exe  OPT='x -oomni' \
+			|| UNZIP=unzip OPT='-d omni'
+		"$UNZIP" $OPT omni.ja
 		sed -i -e '/<key id="key_privatebrowsing"/{ N; s/accel,shift/accel,alt,shift/}' \
 			omni/chrome/browser/content/browser/browser.xhtml
 
