@@ -74,6 +74,15 @@ if [ -e "$omni_ja" ]; then
 	fi
 fi
 
+omni_ja="/usr/lib/firefox-esr/browser/omni.ja"
+if [ -e "$omni_ja" ]; then
+	startupcache="/home/morgan/.cache/mozilla/firefox/l7f8lvsj.default-esr/startupCache/startupCache.8.little"
+	if [ -e "$startupcache" ]; then
+		OMNI['aries']=${omni_ja}
+		STARTUPCACHE['aries']="$startupcache"
+	fi
+fi
+
 echo ==============================================
 echo Environments of omni.ja : ${!OMNI[@]}
 echo ==============================================
